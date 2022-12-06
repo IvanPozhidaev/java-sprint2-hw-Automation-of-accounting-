@@ -2,11 +2,11 @@ import java.util.ArrayList;
 import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
+        GetMonthData getMonthData = new GetMonthData();
         MonthlyReport monthlyReport;
         YearlyReport yearlyReport = null;
         VerifyReports verifyReports;
-        ArrayList<MonthlyReport> monthReports = new ArrayList<>();
-        String path;
+        String path = null;
 
         Scanner scanner = new Scanner(System.in);
         printMenu();
@@ -14,19 +14,16 @@ public class Main {
         while (true){
             switch(inputUser) {
                 case 1:
-                    for (int i = 1; i <= 3; i++) {
-                        path = "m.20210" + i + ".csv";
-                        monthlyReport = new MonthlyReport(i,"resources/"+path);
-                        monthReports.add(monthlyReport);
-                    }
+                    getMonthData.getMonthData();
                     break;
                 case 2:
                     yearlyReport = new YearlyReport("resources/y.2021.csv");
+                    System.out.println("Годовой отчёт успешно считан.");
                     break;
                 case 3:
-                    if (monthReports.size() != 0) {
-                        for (int i = 0; i < monthReports.size(); i++) {
-                            MonthlyReport singleMonth = monthReports.get(i);
+                    if (getMonthData.monthReports.size() != 0) {
+                        for (int i = 0; i < getMonthData.monthReports.size(); i++) {
+                            MonthlyReport singleMonth = getMonthData.monthReports.get(i);
                             System.out.println("Месяц - " + (i + 1));
                             singleMonth.monthInfo();
                         }
@@ -44,9 +41,9 @@ public class Main {
                         break;
                     }
                 case 5:
-                    if(yearlyReport != null && monthReports.size() != 0) {
-                        for (int i = 0; i < monthReports.size(); i++) {
-                            MonthlyReport newMonth = monthReports.get(i);
+                    if(yearlyReport != null && getMonthData.monthReports.size() != 0) {
+                        for (int i = 0; i < getMonthData.monthReports.size(); i++) {
+                            MonthlyReport newMonth = getMonthData.monthReports.get(i);
                             verifyReports = new VerifyReports(newMonth, yearlyReport);
                             boolean checkResults = verifyReports.verifyReports(i+1);
                             if (checkResults) {
